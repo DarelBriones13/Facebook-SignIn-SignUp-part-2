@@ -297,6 +297,12 @@ public class SignUp extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Please agree to the terms of use!", "Error", JOptionPane.ERROR_MESSAGE);
         errorOccurred = true;
     }
+    if (!errorOccurred && isEmailOrNumberExists(email_num)) {
+        JOptionPane.showMessageDialog(this, "Email or number already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+        setErrorText("Email or number already exists!", txtEmail_Number);
+        setErrorBorder(txtEmail_Number);
+        errorOccurred = true;
+    }
 
         if (!errorOccurred) {
             try {
@@ -386,6 +392,21 @@ public class SignUp extends javax.swing.JFrame {
         x.show();
         this.hide();
     }//GEN-LAST:event_btnBacktoLoginActionPerformed
+    private boolean isEmailOrNumberExists(String emailOrNumber) {
+    boolean exists = false;
+    try (BufferedReader reader = new BufferedReader(new FileReader("FacebookInformation.txt"))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.contains("Email/Num.: " + emailOrNumber)) {
+                exists = true;
+                break;
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return exists;
+}
     private void clearTextField(javax.swing.JTextField textField, String defaultText) {
         if (textField.getText().equals(defaultText)) {
             textField.setText("");
